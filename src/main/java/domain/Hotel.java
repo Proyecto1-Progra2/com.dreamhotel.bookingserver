@@ -2,40 +2,40 @@ package domain;
 
 public class Hotel {
 
-    private String numero, nombre, direccion;
+    private String number, name, address;
 
-    public Hotel(String numero, String nombre, String direccion) {
-        this.numero = numero;
-        this.nombre = nombre;
-        this.direccion = direccion;
+    public Hotel(String number, String name, String address) {
+        this.number = number;
+        this.name = name;
+        this.address = address;
     }
 
-    public String getNumero() {
-        return numero;
+    public String getNumber() {
+        return number;
     }
 
-    public void setNumero(String numero) {
-        this.numero = numero;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
-    public String getNombre() {
-        return nombre;
+    public String getName() {
+        return name;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getDireccion() {
-        return direccion;
+    public String getAddress() {
+        return address;
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    public void setAddress(String address) {
+        this.address = address;
     }
 
     @Override
     public String toString() {
-        return "-"+this.numero+"-"+this.nombre+"-"+this.direccion;
+        return "-"+this.number +"-"+this.name +"-"+this.address;
     }
 }

@@ -45,24 +45,24 @@ public class HotelData {
         raf.seek(raf.length() - TAMANO_REGISTRO);
         // Se debe transformar el string en un arreglo de bytes para
         // poder escribirlo en el archivo
-        byte numero[] = toBytes(hotel.getNumero(), TAMANO_NUMERO);
+        byte numero[] = toBytes(hotel.getNumber(), TAMANO_NUMERO);
         raf.write(numero);
-        byte nombre[] = toBytes(hotel.getNombre(), TAMANO_NOMBRE);
+        byte nombre[] = toBytes(hotel.getName(), TAMANO_NOMBRE);
         raf.write(nombre);
-        byte direccion[] = toBytes(hotel.getDireccion(), TAMANO_DIRECCION);
+        byte direccion[] = toBytes(hotel.getAddress(), TAMANO_DIRECCION);
         raf.write(direccion);
     }
 
     public void insertPos(Hotel hotel, int posicion) throws IOException {
         raf.seek(posicion * TAMANO_REGISTRO);
 
-        byte[] numero = toBytes(hotel.getNumero(), TAMANO_NUMERO);
+        byte[] numero = toBytes(hotel.getNumber(), TAMANO_NUMERO);
         raf.write(numero);
 
-        byte[] nombre = toBytes(hotel.getNombre(), TAMANO_NOMBRE);
+        byte[] nombre = toBytes(hotel.getName(), TAMANO_NOMBRE);
         raf.write(nombre);
 
-        byte[] direccion = toBytes(hotel.getDireccion(), TAMANO_DIRECCION);
+        byte[] direccion = toBytes(hotel.getAddress(), TAMANO_DIRECCION);
         raf.write(direccion);
     }
 
