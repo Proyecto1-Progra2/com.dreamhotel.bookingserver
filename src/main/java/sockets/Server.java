@@ -1,6 +1,4 @@
-package org.example;
-
-import domain.Client;
+package sockets;
 
 import java.io.IOException;
 import java.net.InetAddress;

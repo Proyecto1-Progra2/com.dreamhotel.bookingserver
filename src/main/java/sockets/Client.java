@@ -1,7 +1,9 @@
-package domain;
+package sockets;
 
 import data.HotelData;
 import data.HuespedData;
+import domain.Hotel;
+import domain.Huesped;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -68,7 +70,7 @@ public class Client extends Thread {
                         break;
                     case "modificarHotel":
                         Hotel hotel = new Hotel(datos[1], datos[2], datos[3]);
-                        int posHotel = this.hotelData.buscarPosicion(hotel.getNumero());
+                        int posHotel = this.hotelData.buscarPosicion(hotel.getNumber());
                         this.hotelData.insertPos(hotel, posHotel);
                         break;
                     case "eliminarHotel":
