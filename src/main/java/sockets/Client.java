@@ -3,6 +3,7 @@ package sockets;
 import data.HotelData;
 import data.HuespedData;
 import domain.Hotel;
+import utils.Action;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,27 +40,27 @@ public class Client extends Thread {
                 String[] datos = this.lectura.split("-");
                 String accion = datos[0];
                 switch (accion) {
-                    case "registrarHotel":
+                    case Action.HOTEL_REGISTER:
                         this.hotelData.insert(new Hotel(datos[1], datos[2], datos[3]));
                         break;
-                    case "mostrarHoteles":
-                        String envioHoteles = "mostrarHoteles";
+                    case Action.HOTEL_LIST:
+                        String envioHoteles = Action.HOTEL_LIST;
                         ArrayList<Hotel> hoteles = this.hotelData.findAll();
                         for (Hotel hotel : hoteles) {
                             envioHoteles += hotel.toString();
                         }
                         this.send.println(envioHoteles);
                         break;
-                    case "solicitarHotel":
+                    case Action.HOTEL_SEARCH:
                         Hotel hotelSolicitado = this.hotelData.buscarHotel(datos[1]);
-                        this.send.println("hotelSolicitado"+hotelSolicitado.toString());
+                        this.send.println(Action.HOTEL_SEARCH+hotelSolicitado.toString());
                         break;
-                    case "modificarHotel":
+                    case Action.HOTEL_UPDATE:
                         Hotel hotel = new Hotel(datos[1], datos[2], datos[3]);
                         int posHotel = this.hotelData.buscarPosicion(hotel.getNumber());
                         this.hotelData.insertPos(hotel, posHotel);
                         break;
-                    case "eliminarHotel":
+                    case Action.HOTEL_DELETE:
                         this.hotelData.eliminar(datos[1]);
                         break;
                     default:
