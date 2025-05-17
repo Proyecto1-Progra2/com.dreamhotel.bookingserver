@@ -1,7 +1,5 @@
 package data;
 
-import domain.Huesped;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -37,30 +35,30 @@ public class HuespedData {
         }
         return datos;
     }
-
-    public void insert(Huesped huesped) throws IOException {
+/*
+    public void insert(Resident resident) throws IOException {
         //aumentar el tamaño del archivo en 64 bytes (TAMAÑO_REGISTRO)
         raf.setLength(raf.length() + TAMANO_REGISTRO);
         raf.seek(raf.length() - TAMANO_REGISTRO);
         // Se debe transformar el string en un arreglo de bytes para
         // poder escribirlo en el archivo
-        byte nombre[] = toBytes(huesped.getNombre(),TAMANO_NOMBRE);
+        byte nombre[] = toBytes(resident.getName(),TAMANO_NOMBRE);
         raf.write(nombre);
-        byte apellidos[]= toBytes(huesped.getApellido(),TAMANO_APELLIDOS);
+        byte apellidos[]= toBytes(resident.getApellido(),TAMANO_APELLIDOS);
         raf.write(apellidos);
     }
 
-    public ArrayList<Huesped> findAll() throws IOException {
+    public ArrayList<Resident> findAll() throws IOException {
         int totalRegistros = (int)(raf.length()/TAMANO_REGISTRO);
-        ArrayList<Huesped> huespedes = new ArrayList<>();
+        ArrayList<Resident> huespedes = new ArrayList<>();
         for(int i=0; i<totalRegistros; i++){
             raf.seek(i*TAMANO_REGISTRO);
             String nombre = this.readString(TAMANO_NOMBRE,
                     raf.getFilePointer());
             String apellidos = this.readString(TAMANO_APELLIDOS,
                     raf.getFilePointer());
-            huespedes.add(new Huesped(nombre, apellidos));
+            huespedes.add(new Resident(nombre, apellidos));
         }//for
         return huespedes;
-    }
+    }*/
 }
