@@ -3,7 +3,6 @@ package sockets;
 import data.HotelData;
 import data.HuespedData;
 import domain.Hotel;
-import domain.Huesped;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,19 +39,6 @@ public class Client extends Thread {
                 String[] datos = this.lectura.split("-");
                 String accion = datos[0];
                 switch (accion) {
-                    case "registrarHuesped":
-                        this.huespedData.insert(new Huesped(datos[1], datos[2]));
-                        this.lectura = "";
-                        break;
-                    case "mostrar":
-                        String envio = "mostrar";
-                        ArrayList<Huesped> huespedes = this.huespedData.findAll();
-                        for (Huesped huesped : huespedes) {
-                            envio += huesped.toString();
-                        }
-                        this.send.println(envio);
-                        this.lectura = "";
-                        break;
                     case "registrarHotel":
                         this.hotelData.insert(new Hotel(datos[1], datos[2], datos[3]));
                         break;
