@@ -42,6 +42,7 @@ public class Client extends Thread {
                 switch (accion) {
                     case Action.HOTEL_REGISTER:
                         this.hotelData.insert(new Hotel(datos[1], datos[2], datos[3]));
+                        this.send.println(Action.HOTEL_REGISTERED);
                         break;
                     case Action.HOTEL_LIST:
                         String envioHoteles = Action.HOTEL_LIST;
@@ -59,9 +60,11 @@ public class Client extends Thread {
                         Hotel hotel = new Hotel(datos[1], datos[2], datos[3]);
                         int posHotel = this.hotelData.buscarPosicion(hotel.getNumber());
                         this.hotelData.insertPos(hotel, posHotel);
+                        this.send.println(Action.HOTEL_UPDATED);
                         break;
                     case Action.HOTEL_DELETE:
                         this.hotelData.eliminar(datos[1]);
+                        this.send.println(Action.HOTEL_DELETED);
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + accion);
