@@ -68,7 +68,7 @@ public class Client extends Thread {
                         this.hotelData.eliminar(datos[1]);
                         this.send.println(Action.HOTEL_DELETED);
                         break;
-                    case Action.ROOM_REGISTER:
+                    case Action.ROOM_REGISTER: //el dato 5 es de imagenes, que tal en el insert de RoomData mandarle un arreglo de bytes con la imagen
                         this.roomData.insert(new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4])));
                         this.send.println(Action.ROOM_REGISTERED);
                         break;
