@@ -2,7 +2,9 @@ package sockets;
 
 import data.HotelData;
 import data.HuespedData;
+import data.RoomData;
 import domain.Hotel;
+import domain.Room;
 import utils.Action;
 
 import java.io.BufferedReader;
@@ -19,16 +21,16 @@ public class Client extends Thread {
     private Socket socket;
     private String lectura;
 
-    private HuespedData huespedData;
     private HotelData hotelData;
+    private RoomData roomData;
 
     public Client(Socket socket) throws IOException {
         this.socket = socket;
         this.send = new PrintStream(this.socket.getOutputStream());
         this.receive = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
 
-        this.huespedData = new HuespedData();
         this.hotelData = new HotelData();
+        this.roomData = new RoomData();
     } // constructor
 
     @Override
@@ -65,6 +67,10 @@ public class Client extends Thread {
                     case Action.HOTEL_DELETE:
                         this.hotelData.eliminar(datos[1]);
                         this.send.println(Action.HOTEL_DELETED);
+                        break;
+                    case Action.ROOM_REGISTER:
+                        this.roomData.insert(new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4])));
+                        this.send.println(Action.ROOM_REGISTERED);
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + accion);
