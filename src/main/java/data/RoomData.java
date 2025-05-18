@@ -12,11 +12,13 @@ import java.util.ArrayList;
 public class RoomData {
 
     private RandomAccessFile raf;
-    private final int TAMANO_REGISTRO = 98;
+    private final int TAMANO_REGISTRO = 98; //si se usara el tamaño de imagen el tamaño seria de 100_098
     private final int TAMANO_STATUS = 30;
     private final int TAMANO_STYLE = 30;
     private final int TAMANO_ROOMNUMBER = 30;
     private final int TAMANO_PRICE = 8;
+    //private final int TAMANO_IMAGE = 100_000; // 100 KB por imagen;
+
 
     public RoomData() throws FileNotFoundException {
         this.raf = new RandomAccessFile(new File("rooms.dat"), "rw");
