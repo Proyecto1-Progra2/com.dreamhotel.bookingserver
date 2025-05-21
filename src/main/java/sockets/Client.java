@@ -79,7 +79,7 @@ public class Client extends Thread {
                         break;
 
                     case Action.ROOM_REGISTER: //el dato 5 es de imagenes, tal tal en el insert de RoomData mandarle un arreglo de bytes con la imagen
-                        this.roomData.insert(new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4])));//revisar para meter los datos
+                        this.roomData.insert(new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4]), null));//revisar para meter los datos
                         this.send.println(Action.ROOM_REGISTERED);
                         break;
 
@@ -97,7 +97,7 @@ public class Client extends Thread {
                         break;
 
                     case Action.ROOM_UPDATE:
-                        Room room = new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4]));
+                        Room room = new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4]), null);
                         int posRoom = this.roomData.buscarPosicion(room.getRoomNumber());
                         this.roomData.insertPos(room, posRoom);
                         this.send.println(Action.ROOM_UPDATED);
