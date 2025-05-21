@@ -40,11 +40,21 @@ public class Client extends Thread {
                 //System.out.println(this.lectura);
                 String[] datos = this.lectura.split("-");
                 String accion = datos[0];
+
+
                 switch (accion) {
                     case Action.HOTEL_REGISTER:
                         this.hotelData.insert(new Hotel(datos[1], datos[2], datos[3]));
                         this.send.println(Action.HOTEL_REGISTERED);
                         break;
+
+
+                    case Action.HOTEL_NOT_REGISTER:
+                        this.send.println(Action.HOTEL_NOT_REGISTERED);
+                        break;
+
+
+
                     case Action.HOTEL_LIST:
                         String envioHoteles = Action.HOTEL_LIST;
                         ArrayList<Hotel> hoteles = this.hotelData.findAll();
