@@ -48,12 +48,9 @@ public class Client extends Thread {
                         this.send.println(Action.HOTEL_REGISTERED);
                         break;
 
-
                     case Action.HOTEL_NOT_REGISTER:
                         this.send.println(Action.HOTEL_NOT_REGISTERED);
                         break;
-
-
 
                     case Action.HOTEL_LIST:
                         String envioHoteles = Action.HOTEL_LIST;
@@ -63,24 +60,33 @@ public class Client extends Thread {
                         }
                         this.send.println(envioHoteles);
                         break;
+
                     case Action.HOTEL_SEARCH:
                         Hotel hotelSolicitado = this.hotelData.buscarHotel(datos[1]);
                         this.send.println(Action.HOTEL_SEARCH+hotelSolicitado.toString());
                         break;
+
                     case Action.HOTEL_UPDATE:
                         Hotel hotel = new Hotel(datos[1], datos[2], datos[3]);
                         int posHotel = this.hotelData.buscarPosicion(hotel.getNumber());
                         this.hotelData.insertPos(hotel, posHotel);
                         this.send.println(Action.HOTEL_UPDATED);
                         break;
+
                     case Action.HOTEL_DELETE:
                         this.hotelData.eliminar(datos[1]);
                         this.send.println(Action.HOTEL_DELETED);
                         break;
+
                     case Action.ROOM_REGISTER: //el dato 5 es de imagenes, tal tal en el insert de RoomData mandarle un arreglo de bytes con la imagen
                         this.roomData.insert(new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4])));//revisar para meter los datos
                         this.send.println(Action.ROOM_REGISTERED);
                         break;
+
+                    case Action.ROOM_NOT_REGISTER:
+                        this.send.println(Action.ROOM_NOT_REGISTERED);
+                        break;
+
                     case Action.ROOM_LIST: //revisar
                         String envioRooms = Action.ROOM_LIST;
                         ArrayList<Room> rooms = this.roomData.findAll();
@@ -89,12 +95,24 @@ public class Client extends Thread {
                         }
                         this.send.println(envioRooms);
                         break;
+
                     case Action.ROOM_UPDATE:
                         Room room = new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4]));
                         int posRoom = this.roomData.buscarPosicion(room.getRoomNumber());
                         this.roomData.insertPos(room, posRoom);
                         this.send.println(Action.ROOM_UPDATED);
                         break;
+
+                    case Action.ROOM_SEARCH://ese roomSolicitado dice que es null
+                        Room roomSolicitado = this.roomData.roomSearh(datos[1]);
+                        this.send.println(Action.ROOM_SEARCH+roomSolicitado.toString());//no se que debe colocarse
+                        break;
+
+                    case Action.ROOM_DELETE:
+                        this.roomData.eliminar(datos[1]);
+                        this.send.println(Action.ROOM_DELETED);
+                        break;
+
                     default:
                         throw new IllegalStateException("Unexpected value: " + accion);
                 }
