@@ -1,7 +1,6 @@
 package sockets;
 
 import data.HotelData;
-import data.HuespedData;
 import data.RoomData;
 import domain.Hotel;
 import domain.Room;
@@ -71,6 +70,20 @@ public class Client extends Thread {
                     case Action.ROOM_REGISTER: //el dato 5 es de imagenes, tal tal en el insert de RoomData mandarle un arreglo de bytes con la imagen
                         this.roomData.insert(new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4])));//revisar para meter los datos
                         this.send.println(Action.ROOM_REGISTERED);
+                        break;
+                    case Action.ROOM_LIST: //revisar
+                        String envioRooms = Action.ROOM_LIST;
+                        ArrayList<Room> rooms = this.roomData.findAll();
+                        for (Room room : rooms) {
+                            envioRooms += room.toString();
+                        }
+                        this.send.println(envioRooms);
+                        break;
+                    case Action.ROOM_UPDATE:
+                        Room room = new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4]));
+                        int posRoom = this.roomData.buscarPosicion(room.getRoomNumber());
+                        this.roomData.insertPos(room, posRoom);
+                        this.send.println(Action.ROOM_UPDATED);
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + accion);
