@@ -87,7 +87,7 @@ public class RoomData {
             String status = readString(TAMANO_STATUS, raf.getFilePointer());
             String style = readString(TAMANO_STYLE, raf.getFilePointer());
             double price = raf.readDouble();
-            rooms.add(new Room(status, style, roomNumber, price));
+            rooms.add(new Room(status, style, roomNumber, price, null));
         }
         return rooms;
     }
@@ -117,7 +117,7 @@ public class RoomData {
             String roomNumberActually = this.readString(TAMANO_ROOMNUMBER, this.raf.getFilePointer());
             if (roomNumber.equalsIgnoreCase(roomNumberActually))
                 room = new Room(roomNumberActually, this.readString(TAMANO_STATUS, this.raf.getFilePointer()),
-                        this.readString(TAMANO_STYLE, this.raf.getFilePointer()), this.raf.readDouble());
+                        this.readString(TAMANO_STYLE, this.raf.getFilePointer()), this.raf.readDouble(), null);
             else numReg++;
 
         }
