@@ -43,7 +43,7 @@ public class Client extends Thread {
                 String accion = datos[0];
                 switch (accion) {
                     case Action.HOTEL_REGISTER:
-                        this.hotelData.insert(new Hotel(datos[1], datos[2], datos[3]));
+                        this.hotelData.insert(new Hotel(datos[1], datos[2], datos[3], new ArrayList<>()));
                         this.send.println(Action.HOTEL_REGISTERED);
                         break;
                     case Action.HOTEL_NOT_REGISTER:
@@ -62,7 +62,7 @@ public class Client extends Thread {
                         this.send.println(Action.HOTEL_SEARCH+hotelSolicitado.toString());
                         break;
                     case Action.HOTEL_UPDATE:
-                        Hotel hotel = new Hotel(datos[1], datos[2], datos[3]);
+                        Hotel hotel = new Hotel(datos[1], datos[2], datos[3], new ArrayList<>());
                         int posHotel = this.hotelData.buscarPosicion(hotel.getNumber());
                         this.hotelData.insertPos(hotel, posHotel);
                         this.send.println(Action.HOTEL_UPDATED);
@@ -72,7 +72,7 @@ public class Client extends Thread {
                         this.send.println(Action.HOTEL_DELETED);
                         break;
                     case Action.ROOM_REGISTER: //el dato 5 es de imagenes, tal tal en el insert de RoomData mandarle un arreglo de bytes con la imagen
-                        this.roomData.insert(new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4]), null));//revisar para meter los datos
+                        this.roomData.insert(new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4]), null, datos[6]));//revisar para meter los datos
                         this.imageData.insert(new Image(datos[5], new File(datos[6])));
                         this.send.println(Action.ROOM_REGISTERED);
                         break;
@@ -88,7 +88,7 @@ public class Client extends Thread {
                         this.send.println(envioRooms);
                         break;
                     case Action.ROOM_UPDATE:
-                        Room room = new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4]), null);
+                        Room room = new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4]), null, datos[6]);
                         int posRoom = this.roomData.buscarPosicion(room.getRoomNumber());
                         this.roomData.insertPos(room, posRoom);
                         this.send.println(Action.ROOM_UPDATED);
@@ -98,7 +98,7 @@ public class Client extends Thread {
                         this.send.println(Action.ROOM_SEARCH+roomSolicitado.toString());//no se que debe colocarse
                         break;
                     case Action.ROOM_DELETE:
-                        this.roomData.eliminar(datos[1]);
+                        this.roomData.eliminar(datos[1], datos[2]);
                         this.send.println(Action.ROOM_DELETED);
                         break;
                     default:
