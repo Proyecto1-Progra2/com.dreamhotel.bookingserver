@@ -38,7 +38,7 @@ public class Client extends Thread {
         try {
             while (true) {
                 this.lectura = this.receive.readLine();
-                System.out.println(this.lectura);
+                //System.out.println(this.lectura);
                 String[] datos = this.lectura.split("-");
                 String accion = datos[0];
                 switch (accion) {
@@ -100,6 +100,14 @@ public class Client extends Thread {
                     case Action.ROOM_DELETE:
                         this.roomData.eliminar(datos[1], datos[2]);
                         this.send.println(Action.ROOM_DELETED);
+                        break;
+                    case Action.HOTEL_ROOMS:
+                        String envioRoomsHotel = Action.HOTEL_ROOMS;
+                        ArrayList<Room> roomsHotel = this.roomData.findAllRoomsByHotel(datos[1]);
+                        for (Room roomHotel : roomsHotel) {
+                            envioRoomsHotel += roomHotel.toString();
+                        }
+                        this.send.println(envioRoomsHotel);
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + accion);

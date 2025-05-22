@@ -115,9 +115,9 @@ public class HotelData {
             String direccion = readString(TAMANO_DIRECCION, raf.getFilePointer());
 
             // Obtener las habitaciones asociadas a este hotel usando RoomData
-            ArrayList<Room> rooms = roomData.findAllRoomsByHotel(numero.trim());
+            //ArrayList<Room> rooms = roomData.findAllRoomsByHotel(numero.trim());
 
-            hoteles.add(new Hotel(numero.trim(), nombre.trim(), direccion.trim(), rooms));
+            hoteles.add(new Hotel(numero.trim(), nombre.trim(), direccion.trim(), new ArrayList<>()));
         }
         return hoteles;
     }

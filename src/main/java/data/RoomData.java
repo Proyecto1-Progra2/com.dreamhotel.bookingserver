@@ -106,7 +106,7 @@ public class RoomData {
                     // Asegúrate de que el roomNumber de Image coincida con el roomNumber de la Room
                     roomImage = new Image(roomNumber.trim(), imageFile);
                 }
-                rooms.add(new Room(roomNumber.trim(), status.trim(), style.trim(), price, roomImage, currentHotelNumber.trim()));
+                rooms.add(new Room(roomNumber.trim(), status.trim(), style.trim(), price, currentHotelNumber.trim()));
             }
         }
         return rooms;
