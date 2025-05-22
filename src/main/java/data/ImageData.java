@@ -60,16 +60,13 @@ public class ImageData {
     }
 
     // Convertir imagen (desde recursos o disco) a byte[]
-    public static byte[] imagenABytes(String ruta) throws IOException {
+    public static byte[] imageToBytes(String ruta, int tamanoFile) throws IOException {
         try (InputStream is = ImageData.class.getResourceAsStream(ruta);
              ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
-
             if (is == null) throw new IOException("No se encontró la imagen: " + ruta);
-
-            byte[] datos = new byte[1024];
+            byte[] datos = new byte[tamanoFile];
             int n;
             while ((n = is.read(datos)) != -1) buffer.write(datos, 0, n);
-
             return buffer.toByteArray();
         }
     }
