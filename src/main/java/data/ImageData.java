@@ -8,8 +8,8 @@ import java.io.*;
 public class ImageData {
     private RandomAccessFile raf;
     private final int TAMANO_ROOMNUMBER = 30;
-    private final int TAMANO_IMAGE = 100_000;
-    private final int TAMANO_REGISTRO = 130_000; // 100 KB por imagen
+    private final int TAMANO_IMAGE = 150_000;
+    private final int TAMANO_REGISTRO = 180_000; // 100 KB por imagen
 
     public ImageData() throws IOException {
         this.raf = new RandomAccessFile("image.dat", "rw");
@@ -34,6 +34,19 @@ public class ImageData {
         return datos;
     }
 
+    public byte[] fileToBytes(File archivo, int tamanoFile) throws IOException {
+        try (InputStream is = new FileInputStream(archivo);
+             ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
+
+            byte[] datos = new byte[tamanoFile];
+            int n;
+            while ((n = is.read(datos)) != -1)
+                buffer.write(datos, 0, n);
+
+            return buffer.toByteArray();
+        }
+    }
+
     public void insert(Image image) throws IOException {
         //aumentar el tamaño del archivo en 64 bytes (TAMAÑO_REGISTRO)
         raf.setLength(raf.length() + TAMANO_REGISTRO);
@@ -42,7 +55,7 @@ public class ImageData {
         // poder escribirlo en el archivo
         byte roomNumber[] = toBytes(image.getRoomNumber(), TAMANO_ROOMNUMBER);
         raf.write(roomNumber);
-        byte imageBytes[] = toBytes(image.getImage().toString(), TAMANO_IMAGE);
+        byte imageBytes[] = fileToBytes(image.getImage(), TAMANO_IMAGE);
         raf.write(imageBytes);
     }
 
@@ -56,19 +69,6 @@ public class ImageData {
             byte[] datos = new byte[1024];
             int n;
             while ((n = is.read(datos)) != -1) buffer.write(datos, 0, n);
-
-            return buffer.toByteArray();
-        }
-    }
-
-    public static byte[] archivoABytes(File archivo) throws IOException {
-        try (InputStream is = new FileInputStream(archivo);
-             ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
-
-            byte[] datos = new byte[1024];
-            int n;
-            while ((n = is.read(datos)) != -1)
-                buffer.write(datos, 0, n);
 
             return buffer.toByteArray();
         }
