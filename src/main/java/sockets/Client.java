@@ -27,15 +27,14 @@ public class Client extends Thread {
         this.socket = socket;
         this.send = new PrintStream(this.socket.getOutputStream());
         this.receive = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
-
-        this.hotelData = new HotelData();
-        this.roomData = new RoomData();
-        this.imageData = new ImageData();
     } // constructor
 
     @Override
     public void run() {
         try {
+            this.hotelData = new HotelData();
+            this.roomData = new RoomData();
+            this.imageData = new ImageData();
             while (true) {
                 this.lectura = this.receive.readLine();
                 //System.out.println(this.lectura);
