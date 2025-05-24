@@ -62,7 +62,7 @@ public class Client extends Thread {
                         break;
                     case Action.HOTEL_UPDATE:
                         Hotel hotel = new Hotel(datos[1], datos[2], datos[3], new ArrayList<>());
-                        int posHotel = this.hotelData.buscarPosicion(hotel.getNumber());
+                        int posHotel = this.hotelData.buscarPosicion(datos[4]);
                         this.hotelData.insertPos(hotel, posHotel);
                         this.send.println(Action.HOTEL_UPDATED);
                         break;
