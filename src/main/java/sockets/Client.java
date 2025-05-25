@@ -110,6 +110,17 @@ public class Client extends Thread {
                         }
                         this.send.println(envioRoomsHotel);
                         break;
+                    case Action.IMAGE_REQUEST:
+                        String envioImage = Action.IMAGE_REQUEST;
+                        String imageString = "";
+                        ArrayList<Image> images = this.imageData.findByRoomNumber(datos[1]);
+                        for (Image image : images) {
+                            byte[] imageBytes2 = image.getImage();
+                            imageString = Base64.getEncoder().encodeToString(imageBytes2);
+                            envioImage += "-"+imageString;
+                        }
+                        this.send.println(envioImage+imageString);
+                        break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + accion);
                 }

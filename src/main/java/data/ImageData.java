@@ -4,6 +4,7 @@ import domain.Image;
 import domain.Room;
 
 import java.io.*;
+import java.util.ArrayList;
 
 public class ImageData {
     private RandomAccessFile raf;
@@ -43,6 +44,31 @@ public class ImageData {
         byte roomNumber[] = toBytes(image.getRoomNumber(), TAMANO_ROOMNUMBER);
         raf.write(roomNumber);
         raf.write(image.getImage());
+    }
+
+    public ArrayList<Image> findByRoomNumber(String roomNumberBuscado) throws IOException {
+        ArrayList<Image> imagenes = new ArrayList<>();
+        raf.seek(0);
+
+        long totalRegistros = raf.length() / TAMANO_REGISTRO;
+
+        for (int i = 0; i < totalRegistros; i++) {
+            long pos = i * TAMANO_REGISTRO;
+
+            // Leer el número de habitación
+            String roomNumber = readString(TAMANO_ROOMNUMBER, pos);
+
+            if (roomNumber.equals(roomNumberBuscado)) {
+                // Leer los bytes de la imagen
+                raf.seek(pos + TAMANO_ROOMNUMBER);
+                byte[] imageBytes = new byte[TAMANO_IMAGE];
+                raf.readFully(imageBytes);
+
+                imagenes.add(new Image(roomNumber, imageBytes));
+            }
+        }
+
+        return imagenes;
     }
 
     // Convertir imagen (desde recursos o disco) a byte[]
