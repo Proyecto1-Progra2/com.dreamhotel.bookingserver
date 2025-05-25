@@ -19,9 +19,12 @@ public class RoomData {
     // TAMANO_IMAGE_PATH: DEBE SER SUFICIENTE PARA LA RUTA ABSOLUTA DE UN ARCHIVO
     private final int TAMANO_IMAGE_PATH = 100; // Por ejemplo, 100 caracteres para la ruta del archivo
     private final int TAMANO_HOTEL_NUMBER = 20;
+    private final int TAMANO_IMAGEN = 1024; // Máximo tamaño de imagen
+
 
     // Calcula el tamaño total del registro sumando todos los tamaños de los campos
-    private final int TAMANO_REGISTRO = TAMANO_ROOMNUMBER + TAMANO_STATUS + TAMANO_STYLE + TAMANO_PRICE + TAMANO_IMAGE_PATH + TAMANO_HOTEL_NUMBER;
+    private final int TAMANO_REGISTRO = TAMANO_ROOMNUMBER + TAMANO_STATUS + TAMANO_STYLE + TAMANO_PRICE + TAMANO_IMAGEN + TAMANO_HOTEL_NUMBER;
+
 
 
     public RoomData() throws FileNotFoundException {
@@ -55,11 +58,12 @@ public class RoomData {
         raf.write(toBytes(room.getStyle(), TAMANO_STYLE));
         raf.writeDouble(room.getPrice());
 
-        // Guardar la ruta absoluta del archivo de la imagen
-        // Si no hay imagen, guarda una cadena vacía o nula.
-        String imagePathToSave = (room.getImage() != null && room.getImage().getImage() != null) ?
-                room.getImage().getImage().getAbsolutePath() : "";
-        raf.write(toBytes(imagePathToSave, TAMANO_IMAGE_PATH));
+        // Guardar la imagen como byte[]
+        byte[] imageBytes = (room.getImage() != null && room.getImage().getImage() != null) ?
+                room.getImage().getImage() : new byte[0];
+        byte[] imageFixed = new byte[TAMANO_IMAGEN];
+        System.arraycopy(imageBytes, 0, imageFixed, 0, Math.min(imageBytes.length, TAMANO_IMAGEN));
+        raf.write(imageFixed);
 
         raf.write(toBytes(room.getHotelNumber(), TAMANO_HOTEL_NUMBER));
     }
@@ -72,9 +76,12 @@ public class RoomData {
         raf.write(toBytes(room.getStyle(), TAMANO_STYLE));
         raf.writeDouble(room.getPrice());
 
-        String imagePathToSave = (room.getImage() != null && room.getImage().getImage() != null) ?
-                room.getImage().getImage().getAbsolutePath() : "";
-        raf.write(toBytes(imagePathToSave, TAMANO_IMAGE_PATH));
+        // Guardar la imagen como byte[]
+        byte[] imageBytes = (room.getImage() != null && room.getImage().getImage() != null) ?
+                room.getImage().getImage() : new byte[0];
+        byte[] imageFixed = new byte[TAMANO_IMAGEN];
+        System.arraycopy(imageBytes, 0, imageFixed, 0, Math.min(imageBytes.length, TAMANO_IMAGEN));
+        raf.write(imageFixed);
 
         raf.write(toBytes(room.getHotelNumber(), TAMANO_HOTEL_NUMBER));
     }
@@ -95,18 +102,13 @@ public class RoomData {
             String status = readString(TAMANO_STATUS, raf.getFilePointer());
             String style = readString(TAMANO_STYLE, raf.getFilePointer());
             double price = raf.readDouble();
-            String imagePath = readString(TAMANO_IMAGE_PATH, raf.getFilePointer());
+            byte[] imageBytes = new byte[TAMANO_IMAGEN];
+            raf.readFully(imageBytes);
             String currentHotelNumber = readString(TAMANO_HOTEL_NUMBER, raf.getFilePointer());
 
             if (currentHotelNumber.trim().equalsIgnoreCase(hotelNumber)) {
-                Image roomImage = null;
-                if (!imagePath.isEmpty()) {
-                    // Recrear el objeto File y luego el objeto Image
-                    File imageFile = new File(imagePath.trim());
-                    // Asegúrate de que el roomNumber de Image coincida con el roomNumber de la Room
-                    roomImage = new Image(roomNumber.trim(), imageFile);
-                }
-                rooms.add(new Room(roomNumber.trim(), status.trim(), style.trim(), price, currentHotelNumber.trim()));
+                Image roomImage = new Image(roomNumber.trim(), imageBytes);
+                rooms.add(new Room(roomNumber.trim(), status.trim(), style.trim(), price, roomImage, currentHotelNumber.trim()));
             }
         }
         return rooms;
@@ -126,14 +128,12 @@ public class RoomData {
             String status = readString(TAMANO_STATUS, raf.getFilePointer());
             String style = readString(TAMANO_STYLE, raf.getFilePointer());
             double price = raf.readDouble();
-            String imagePath = readString(TAMANO_IMAGE_PATH, raf.getFilePointer());
+            byte[] imageBytes = new byte[TAMANO_IMAGEN];
+            raf.readFully(imageBytes);
+            Image roomImage = new Image(roomNumber.trim(), imageBytes);
+
             String hotelNumber = readString(TAMANO_HOTEL_NUMBER, raf.getFilePointer());
 
-            Image roomImage = null;
-            if (!imagePath.isEmpty()) {
-                File imageFile = new File(imagePath.trim());
-                roomImage = new Image(roomNumber.trim(), imageFile);
-            }
             rooms.add(new Room(roomNumber.trim(), status.trim(), style.trim(), price, roomImage, hotelNumber.trim()));
         }
         return rooms;
@@ -164,14 +164,12 @@ public class RoomData {
                 String status = this.readString(TAMANO_STATUS, this.raf.getFilePointer());
                 String style = this.readString(TAMANO_STYLE, this.raf.getFilePointer());
                 double price = this.raf.readDouble();
-                String imagePath = this.readString(TAMANO_IMAGE_PATH, this.raf.getFilePointer());
+                byte[] imageBytes = new byte[TAMANO_IMAGEN];
+                raf.readFully(imageBytes);
+                Image roomImage = new Image(roomNumberActual.trim(), imageBytes);
+
                 String hotelNumber = this.readString(TAMANO_HOTEL_NUMBER, this.raf.getFilePointer());
 
-                Image roomImage = null;
-                if (!imagePath.isEmpty()) {
-                    File imageFile = new File(imagePath.trim());
-                    roomImage = new Image(roomNumberActual.trim(), imageFile);
-                }
                 room = new Room(roomNumberActual.trim(), status.trim(), style.trim(), price, roomImage, hotelNumber.trim());
             } else {
                 numReg++;

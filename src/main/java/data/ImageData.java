@@ -34,19 +34,6 @@ public class ImageData {
         return datos;
     }
 
-    public byte[] fileToBytes(File archivo, int tamanoFile) throws IOException {
-        try (InputStream is = new FileInputStream(archivo);
-             ByteArrayOutputStream buffer = new ByteArrayOutputStream()) {
-
-            byte[] datos = new byte[tamanoFile];
-            int n;
-            while ((n = is.read(datos)) != -1)
-                buffer.write(datos, 0, n);
-
-            return buffer.toByteArray();
-        }
-    }
-
     public void insert(Image image) throws IOException {
         //aumentar el tamaño del archivo en 64 bytes (TAMAÑO_REGISTRO)
         raf.setLength(raf.length() + TAMANO_REGISTRO);
@@ -55,8 +42,7 @@ public class ImageData {
         // poder escribirlo en el archivo
         byte roomNumber[] = toBytes(image.getRoomNumber(), TAMANO_ROOMNUMBER);
         raf.write(roomNumber);
-        byte imageBytes[] = fileToBytes(image.getImage(), TAMANO_IMAGE);
-        raf.write(imageBytes);
+        raf.write(image.getImage());
     }
 
     // Convertir imagen (desde recursos o disco) a byte[]

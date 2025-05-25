@@ -11,6 +11,7 @@ import utils.Action;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Base64;
 
 public class Client extends Thread {
 
@@ -37,7 +38,7 @@ public class Client extends Thread {
             this.imageData = new ImageData();
             while (true) {
                 this.lectura = this.receive.readLine();
-                //System.out.println(this.lectura);
+                System.out.println(this.lectura);
                 String[] datos = this.lectura.split("-");
                 String accion = datos[0];
                 switch (accion) {
@@ -72,7 +73,8 @@ public class Client extends Thread {
                         break;
                     case Action.ROOM_REGISTER: //el dato 5 es de imagenes, tal tal en el insert de RoomData mandarle un arreglo de bytes con la imagen
                         this.roomData.insert(new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4]), null, datos[7]));//revisar para meter los datos
-                        this.imageData.insert(new Image(datos[5], new File(datos[6])));
+                        byte[] imageBytes = Base64.getDecoder().decode(datos[6]);
+                        this.imageData.insert(new Image(datos[5], imageBytes));
                         this.send.println(Action.ROOM_REGISTERED);
                         break;
                     case Action.ROOM_NOT_REGISTER:
