@@ -113,6 +113,18 @@ public class RoomData {
         return rooms;
     }
 
+    public Room findHotelRoom(String roomNumber, String hotelNumber) throws IOException {
+        Room room = null;
+        ArrayList<Room> rooms = findAllRoomsByHotel(hotelNumber);
+        for (Room r : rooms) {
+            if (r.getRoomNumber().trim().equalsIgnoreCase(roomNumber.trim())) {
+                room = r;
+                break;
+            }
+        }
+        return room;
+    }
+
     public ArrayList<Room> findAll() throws IOException {
         ArrayList<Room> rooms = new ArrayList<>();
         long totalRegistros = raf.length() / TAMANO_REGISTRO;
@@ -138,14 +150,17 @@ public class RoomData {
         return rooms;
     }
 
-    public int buscarPosicion(String roomNumber) throws IOException {
+    public int buscarPosicion(String roomNumber, String hotelNumber) throws IOException {
         boolean encontrado = false;
         int totalRegistros = (int) (this.raf.length() / TAMANO_REGISTRO);
         int numReg = 0;
         while (numReg < totalRegistros && !encontrado) {
             this.raf.seek(numReg * TAMANO_REGISTRO);
-            String roomNumberActual = this.readString(TAMANO_ROOMNUMBER, this.raf.getFilePointer());
-            if (roomNumber.equalsIgnoreCase(roomNumberActual.trim()))
+            String roomNumberActual = readString(TAMANO_ROOMNUMBER, raf.getFilePointer());
+            // Mover el puntero para leer el hotelNumber sin leer los campos intermedios nuevamente
+            raf.seek(raf.getFilePointer() + TAMANO_STATUS + TAMANO_STYLE + TAMANO_PRICE + TAMANO_IMAGEN);
+            String hotelNumberActual = readString(TAMANO_HOTEL_NUMBER, raf.getFilePointer());
+            if (roomNumber.equalsIgnoreCase(roomNumberActual.trim()) && hotelNumber.equalsIgnoreCase(hotelNumberActual.trim()))
                 encontrado = true;
             else numReg++;
         }
@@ -177,7 +192,7 @@ public class RoomData {
         return room;
     }
 
-    public void eliminar(String roomNumberToDelete, String hotelNumberToDelete) throws IOException {
+    public void deleteHotelRoom(String roomNumberToDelete, String hotelNumberToDelete) throws IOException {
         int totalRegistros = (int)(raf.length() / TAMANO_REGISTRO);
         for (int i = 0; i < totalRegistros; i++) {
             raf.seek(i * TAMANO_REGISTRO);

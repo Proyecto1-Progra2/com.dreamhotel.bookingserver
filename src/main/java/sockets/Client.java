@@ -38,7 +38,7 @@ public class Client extends Thread {
             this.imageData = new ImageData();
             while (true) {
                 this.lectura = this.receive.readLine();
-                System.out.println(this.lectura);
+                //System.out.println(this.lectura);
                 String[] datos = this.lectura.split("-");
                 String accion = datos[0];
                 switch (accion) {
@@ -90,16 +90,17 @@ public class Client extends Thread {
                         break;
                     case Action.ROOM_UPDATE:
                         Room room = new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4]), null, datos[7]);
-                        int posRoom = this.roomData.buscarPosicion(room.getRoomNumber());
+                        int posRoom = this.roomData.buscarPosicion(room.getRoomNumber(), room.getHotelNumber());
+                        System.out.println(posRoom);
                         this.roomData.insertPos(room, posRoom);
                         this.send.println(Action.ROOM_UPDATED);
                         break;
                     case Action.ROOM_SEARCH://ese roomSolicitado dice que es null
-                        Room roomSolicitado = this.roomData.roomSearh(datos[1]);
+                        Room roomSolicitado = this.roomData.findHotelRoom(datos[1], datos[2]);
                         this.send.println(Action.ROOM_SEARCH+roomSolicitado.toString());//no se que debe colocarse
                         break;
                     case Action.ROOM_DELETE:
-                        this.roomData.eliminar(datos[1], datos[2]);
+                        this.roomData.deleteHotelRoom(datos[1], datos[2]);
                         this.send.println(Action.ROOM_DELETED);
                         break;
                     case Action.HOTEL_ROOMS:
