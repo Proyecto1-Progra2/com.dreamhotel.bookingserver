@@ -17,7 +17,6 @@ public class RoomData {
     private final int TAMANO_STYLE = 30;
     private final int TAMANO_PRICE = 8; // Double siempre ocupa 8 bytes
     // TAMANO_IMAGE_PATH: DEBE SER SUFICIENTE PARA LA RUTA ABSOLUTA DE UN ARCHIVO
-    private final int TAMANO_IMAGE_PATH = 100; // Por ejemplo, 100 caracteres para la ruta del archivo
     private final int TAMANO_HOTEL_NUMBER = 20;
     private final int TAMANO_IMAGEN = 1024; // Máximo tamaño de imagen
 
@@ -95,7 +94,7 @@ public class RoomData {
 
             String roomNumber = readString(TAMANO_ROOMNUMBER, raf.getFilePointer());
             if (roomNumber.trim().equals("***")) {
-                raf.skipBytes(TAMANO_STATUS + TAMANO_STYLE + TAMANO_PRICE + TAMANO_IMAGE_PATH + TAMANO_HOTEL_NUMBER);
+                raf.skipBytes(TAMANO_STATUS + TAMANO_STYLE + TAMANO_PRICE + TAMANO_IMAGEN + TAMANO_HOTEL_NUMBER);
                 continue;
             }
 
@@ -122,7 +121,7 @@ public class RoomData {
             raf.seek(i * TAMANO_REGISTRO);
             String roomNumber = readString(TAMANO_ROOMNUMBER, raf.getFilePointer());
             if (roomNumber.trim().equals("***")) {
-                raf.skipBytes(TAMANO_STATUS + TAMANO_STYLE + TAMANO_PRICE + TAMANO_IMAGE_PATH + TAMANO_HOTEL_NUMBER);
+                raf.skipBytes(TAMANO_STATUS + TAMANO_STYLE + TAMANO_PRICE + TAMANO_IMAGEN + TAMANO_HOTEL_NUMBER);
                 continue;
             }
             String status = readString(TAMANO_STATUS, raf.getFilePointer());
@@ -184,7 +183,7 @@ public class RoomData {
             raf.seek(i * TAMANO_REGISTRO);
             String roomNumberActual = readString(TAMANO_ROOMNUMBER, raf.getFilePointer());
             // Mover el puntero para leer el hotelNumber sin leer los campos intermedios nuevamente
-            raf.seek(raf.getFilePointer() + TAMANO_STATUS + TAMANO_STYLE + TAMANO_PRICE + TAMANO_IMAGE_PATH);
+            raf.seek(raf.getFilePointer() + TAMANO_STATUS + TAMANO_STYLE + TAMANO_PRICE + TAMANO_IMAGEN);
             String hotelNumberActual = readString(TAMANO_HOTEL_NUMBER, raf.getFilePointer());
 
             if (roomNumberActual.trim().equalsIgnoreCase(roomNumberToDelete) && hotelNumberActual.trim().equalsIgnoreCase(hotelNumberToDelete)) {
@@ -200,7 +199,7 @@ public class RoomData {
         long totalRegistros = raf.length() / TAMANO_REGISTRO;
         for (int i = 0; i < totalRegistros; i++) {
             raf.seek(i * TAMANO_REGISTRO);
-            raf.skipBytes(TAMANO_ROOMNUMBER + TAMANO_STATUS + TAMANO_STYLE + TAMANO_PRICE + TAMANO_IMAGE_PATH);
+            raf.skipBytes(TAMANO_ROOMNUMBER + TAMANO_STATUS + TAMANO_STYLE + TAMANO_PRICE + TAMANO_IMAGEN);
             String currentHotelNumber = readString(TAMANO_HOTEL_NUMBER, raf.getFilePointer());
 
             if (currentHotelNumber.trim().equalsIgnoreCase(hotelNumberToDelete)) {
