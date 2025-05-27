@@ -106,7 +106,7 @@ public class RoomData {
             String currentHotelNumber = readString(TAMANO_HOTEL_NUMBER, raf.getFilePointer());
 
             if (currentHotelNumber.trim().equalsIgnoreCase(hotelNumber)) {
-                Image roomImage = new Image(roomNumber.trim(), imageBytes);
+                Image roomImage = new Image(roomNumber.trim(), currentHotelNumber.trim(), imageBytes); // <--- hotelNumber agregado
                 rooms.add(new Room(roomNumber.trim(), status.trim(), style.trim(), price, roomImage, currentHotelNumber.trim()));
             }
         }
@@ -141,10 +141,9 @@ public class RoomData {
             double price = raf.readDouble();
             byte[] imageBytes = new byte[TAMANO_IMAGEN];
             raf.readFully(imageBytes);
-            Image roomImage = new Image(roomNumber.trim(), imageBytes);
 
             String hotelNumber = readString(TAMANO_HOTEL_NUMBER, raf.getFilePointer());
-
+            Image roomImage = new Image(roomNumber.trim(), hotelNumber.trim(), imageBytes);
             rooms.add(new Room(roomNumber.trim(), status.trim(), style.trim(), price, roomImage, hotelNumber.trim()));
         }
         return rooms;
@@ -180,10 +179,9 @@ public class RoomData {
                 double price = this.raf.readDouble();
                 byte[] imageBytes = new byte[TAMANO_IMAGEN];
                 raf.readFully(imageBytes);
-                Image roomImage = new Image(roomNumberActual.trim(), imageBytes);
 
                 String hotelNumber = this.readString(TAMANO_HOTEL_NUMBER, this.raf.getFilePointer());
-
+                Image roomImage = new Image(roomNumberActual.trim(), hotelNumber.trim(), imageBytes); // <--- hotelNumber agregado
                 room = new Room(roomNumberActual.trim(), status.trim(), style.trim(), price, roomImage, hotelNumber.trim());
             } else {
                 numReg++;

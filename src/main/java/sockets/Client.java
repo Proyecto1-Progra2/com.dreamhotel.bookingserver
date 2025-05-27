@@ -74,7 +74,7 @@ public class Client extends Thread {
                     case Action.ROOM_REGISTER: //el dato 5 es de imagenes, tal tal en el insert de RoomData mandarle un arreglo de bytes con la imagen
                         this.roomData.insert(new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4]), null, datos[7]));//revisar para meter los datos
                         byte[] imageBytes = Base64.getDecoder().decode(datos[6]);
-                        this.imageData.insert(new Image(datos[5], imageBytes));
+                        this.imageData.insert(new Image(datos[5], datos[7], imageBytes));
                         this.send.println(Action.ROOM_REGISTERED);
                         break;
                     case Action.ROOM_NOT_REGISTER:
@@ -114,7 +114,7 @@ public class Client extends Thread {
                     case Action.IMAGE_REQUEST:
                         String envioImage = Action.IMAGE_REQUEST;
                         String imageString = "";
-                        ArrayList<Image> images = this.imageData.findByRoomNumber(datos[1]);
+                        ArrayList<Image> images = this.imageData.findByRoomNumber(datos[1], datos[2]);
                         for (Image image : images) {
                             byte[] imageBytes2 = image.getImage();
                             imageString = Base64.getEncoder().encodeToString(imageBytes2);

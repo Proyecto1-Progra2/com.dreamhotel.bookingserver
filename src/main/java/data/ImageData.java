@@ -9,8 +9,9 @@ import java.util.ArrayList;
 public class ImageData {
     private RandomAccessFile raf;
     private final int TAMANO_ROOMNUMBER = 30;
-    private final int TAMANO_IMAGE = 150_000;
-    private final int TAMANO_REGISTRO = 180_000; // 100 KB por imagen
+    private final int TAMANO_HOTELNUMBER = 30;
+    private final int TAMANO_IMAGE = 100_000;
+    private final int TAMANO_REGISTRO = 160_000; // 100 KB por imagen
 
     public ImageData() throws IOException {
         this.raf = new RandomAccessFile("image.dat", "rw");
@@ -43,10 +44,12 @@ public class ImageData {
         // poder escribirlo en el archivo
         byte roomNumber[] = toBytes(image.getRoomNumber(), TAMANO_ROOMNUMBER);
         raf.write(roomNumber);
+        byte hotelNumber[] = toBytes(image.getHotelNumber(), TAMANO_HOTELNUMBER);
+        raf.write(hotelNumber);
         raf.write(image.getImage());
     }
 
-    public ArrayList<Image> findByRoomNumber(String roomNumberBuscado) throws IOException {
+    public ArrayList<Image> findByRoomNumber(String roomNumberBuscado, String hotelNumberBuscado) throws IOException {
         ArrayList<Image> imagenes = new ArrayList<>();
         raf.seek(0);
 
@@ -54,22 +57,20 @@ public class ImageData {
 
         for (int i = 0; i < totalRegistros; i++) {
             long pos = i * TAMANO_REGISTRO;
-
-            // Leer el número de habitación
             String roomNumber = readString(TAMANO_ROOMNUMBER, pos);
-
-            if (roomNumber.equals(roomNumberBuscado)) {
+            String hotelNumber = readString(TAMANO_HOTELNUMBER, pos + TAMANO_ROOMNUMBER);
+            if (roomNumber.equals(roomNumberBuscado) && hotelNumber.equals(hotelNumberBuscado)) {
                 // Leer los bytes de la imagen
-                raf.seek(pos + TAMANO_ROOMNUMBER);
+                raf.seek(pos + TAMANO_ROOMNUMBER + TAMANO_HOTELNUMBER);
                 byte[] imageBytes = new byte[TAMANO_IMAGE];
                 raf.readFully(imageBytes);
-
-                imagenes.add(new Image(roomNumber, imageBytes));
+                imagenes.add(new Image(roomNumber, hotelNumber, imageBytes));
             }
         }
 
         return imagenes;
     }
+
 
     // Convertir imagen (desde recursos o disco) a byte[]
     public static byte[] imageToBytes(String ruta, int tamanoFile) throws IOException {
