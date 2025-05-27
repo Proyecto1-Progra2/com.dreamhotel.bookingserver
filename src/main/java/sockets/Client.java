@@ -39,7 +39,7 @@ public class Client extends Thread {
             while (true) {
                 this.lectura = this.receive.readLine();
                 //System.out.println(this.lectura);
-                String[] datos = this.lectura.split("-");
+                String[] datos = this.lectura.split("\\|\\|\\|");
                 String accion = datos[0];
                 switch (accion) {
                     case Action.HOTEL_REGISTER:
@@ -112,15 +112,16 @@ public class Client extends Thread {
                         this.send.println(envioRoomsHotel);
                         break;
                     case Action.IMAGE_REQUEST:
-                        String envioImage = Action.IMAGE_REQUEST;
-                        String imageString = "";
+                        StringBuilder envioImageBuilder = new StringBuilder(Action.IMAGE_REQUEST);
                         ArrayList<Image> images = this.imageData.findByRoomNumber(datos[1], datos[2]);
+
                         for (Image image : images) {
                             byte[] imageBytes2 = image.getImage();
-                            imageString = Base64.getEncoder().encodeToString(imageBytes2);
-                            envioImage += "-"+imageString;
+                            String encoded = Base64.getEncoder().encodeToString(imageBytes2);
+                            envioImageBuilder.append("|||").append(encoded);
                         }
-                        this.send.println(envioImage+imageString);
+
+                        this.send.println(envioImageBuilder.toString());
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + accion);
