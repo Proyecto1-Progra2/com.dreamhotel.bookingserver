@@ -89,15 +89,15 @@ public class HotelData {
         // podrías querer manejar también la actualización de sus habitaciones.
         // Una estrategia común es eliminar las habitaciones antiguas asociadas
         // y luego insertar las nuevas.
-        if (hotel.getRooms() != null) {
-            // Esto elimina todas las habitaciones de este hotel antes de insertar las nuevas.
-            // Ten cuidado con esto si solo quieres actualizar algunas habitaciones.
-            roomData.deleteAllRoomsByHotel(hotel.getNumber());
-            for (Room room : hotel.getRooms()) {
-                room.setHotelNumber(hotel.getNumber());
-                roomData.insert(room);
-            }
-        }
+//        if (hotel.getRooms() != null) {
+//            // Esto elimina todas las habitaciones de este hotel antes de insertar las nuevas.
+//            // Ten cuidado con esto si solo quieres actualizar algunas habitaciones.
+//            roomData.deleteAllRoomsByHotel(hotel.getNumber());
+//            for (Room room : hotel.getRooms()) {
+//                room.setHotelNumber(hotel.getNumber());
+//                roomData.insert(room);
+//            }
+//        }
     }
 
     public ArrayList<Hotel> findAll() throws IOException {
