@@ -2,9 +2,11 @@ package sockets;
 
 import data.HotelData;
 import data.ImageData;
+import data.ReceptionistData;
 import data.RoomData;
 import domain.Hotel;
 import domain.Image;
+import domain.Receptionist;
 import domain.Room;
 import utils.Action;
 
@@ -23,6 +25,7 @@ public class Client extends Thread {
     private HotelData hotelData;
     private RoomData roomData;
     private ImageData imageData;
+    private ReceptionistData receptionistData;
 
     public Client(Socket socket) throws IOException {
         this.socket = socket;
@@ -36,6 +39,8 @@ public class Client extends Thread {
             this.hotelData = new HotelData();
             this.roomData = new RoomData();
             this.imageData = new ImageData();
+            this.receptionistData = new ReceptionistData();
+
             while (true) {
                 this.lectura = this.receive.readLine();
                 //System.out.println(this.lectura);
@@ -123,6 +128,13 @@ public class Client extends Thread {
 
                         this.send.println(envioImageBuilder.toString());
                         break;
+                    case Action.RECEPTIONIST_REGISTER:
+                        this.receptionistData.insert(new Receptionist(datos[1], datos[2], datos[3], Integer.parseInt(datos[4]), datos[5], datos[6]));
+                        this.send.println(Action.RECEPTIONIST_REGISTERED);
+                        break;
+                    case Action.RECEPTIONIST_SEARCH:
+                        this.receptionistData.receptionistLogin(datos[1],datos[2]);
+
                     default:
                         throw new IllegalStateException("Unexpected value: " + accion);
                 }
