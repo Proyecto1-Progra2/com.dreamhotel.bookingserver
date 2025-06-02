@@ -97,4 +97,19 @@ public class BookingData {
         }
         return bookings;
     }
+
+    public boolean bookingNumberExists(String bookingNumber) throws IOException {
+        int totalRegistros = (int)(raf.length() / TAMANO_REGISTRO);
+
+        for (int i = 0; i < totalRegistros; i++) {
+            raf.seek(i * TAMANO_REGISTRO);
+            String currentBookingNumber = readString(TAMANO_BOOKING_NUMBER, raf.getFilePointer());
+
+            if (currentBookingNumber.trim().equals(bookingNumber)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

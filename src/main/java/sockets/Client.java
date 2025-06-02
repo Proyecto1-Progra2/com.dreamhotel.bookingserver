@@ -1,9 +1,6 @@
 package sockets;
 
-import data.HotelData;
-import data.ImageData;
-import data.ReceptionistData;
-import data.RoomData;
+import data.*;
 import domain.Hotel;
 import domain.Image;
 import domain.Receptionist;
@@ -26,6 +23,7 @@ public class Client extends Thread {
     private RoomData roomData;
     private ImageData imageData;
     private ReceptionistData receptionistData;
+    private BookingData bookingData;
 
     public Client(Socket socket) throws IOException {
         this.socket = socket;
@@ -40,6 +38,7 @@ public class Client extends Thread {
             this.roomData = new RoomData();
             this.imageData = new ImageData();
             this.receptionistData = new ReceptionistData();
+            this.bookingData = new BookingData();
 
             while (true) {
                 this.lectura = this.receive.readLine();
@@ -134,7 +133,14 @@ public class Client extends Thread {
                         break;
                     case Action.RECEPTIONIST_SEARCH:
                         this.receptionistData.receptionistLogin(datos[1],datos[2]);
-
+                        break;
+                    case Action.REQUEST_BOOKING_NUMBER:
+                        if (this.bookingData.bookingNumberExists(datos[1])) {
+                            this.send.println(Action.BOOKING_NUMBER_EXIST);
+                        } else {
+                            this.send.println(Action.BOOKING_NUMBER_NO_EXIST);
+                        }
+                        break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + accion);
                 }
