@@ -62,29 +62,42 @@ public class ReceptionistData {
 
     }
 
-    public boolean receptionistLogin(String username, String password) throws IOException {
-        boolean encontrado = false;
+    public Receptionist receptionistLogin(String username, String password) throws IOException {
         int totalRegistros = (int) (this.raf.length() / TAMANO_REGISTRO);
         int numReg = 0;
+        Receptionist receptionist = null;
 
-        while (numReg < totalRegistros && !encontrado) {
-            int posInicioRegistro = numReg * TAMANO_REGISTRO;// el inicio del archivo
+        while (numReg < totalRegistros) {
+            int posInicioRegistro = numReg * TAMANO_REGISTRO;
 
-            int posUsername = posInicioRegistro + TAMANO_EMPLOYEDNUMBER + TAMANO_NAME + TAMANO_LASTNAME + 4; //la posición para apuntar al usuario de cada archivo
-            raf.seek(posUsername);
-            String usernameActual = readString(TAMANO_USERNAME, posUsername);
+            // Leer campos
+            raf.seek(posInicioRegistro);
+            String employedNumber = readString(TAMANO_EMPLOYEDNUMBER, posInicioRegistro).trim();
 
-            int posPassword = posUsername + TAMANO_USERNAME; //la posición para apuntar la password de cada archivo
-            raf.seek(posPassword);
-            String passwordActual = readString(TAMANO_PASSWORD, posPassword);
+            int posName = posInicioRegistro + TAMANO_EMPLOYEDNUMBER;
+            String name = readString(TAMANO_NAME, posName).trim();
 
-            //valida si el usuario con su contraseña ya existen
-            if (username.compareToIgnoreCase(usernameActual.trim())==0 && password.compareToIgnoreCase(passwordActual.trim())==0) // Usar trim() para comparar
-                encontrado = true;
-            else numReg++;
+            int posLastName = posName + TAMANO_NAME;
+            String lastName = readString(TAMANO_LASTNAME, posLastName).trim();
+
+            int posPhone = posLastName + TAMANO_LASTNAME;
+            raf.seek(posPhone);
+            int phoneNumber = raf.readInt(); // importante leer el int
+
+            int posUsername = posPhone + 4;
+            String usernameActual = readString(TAMANO_USERNAME, posUsername).trim();
+
+            int posPassword = posUsername + TAMANO_USERNAME;
+            String passwordActual = readString(TAMANO_PASSWORD, posPassword).trim();
+
+            if (username.equalsIgnoreCase(usernameActual) && password.equalsIgnoreCase(passwordActual)) {
+                receptionist = new Receptionist(employedNumber, name, lastName, phoneNumber, usernameActual, passwordActual);
+            }
+
+            numReg++;
         }
 
-        return encontrado;
+        return receptionist;
     }
 
     public Receptionist receptionistLoginTwo(String username, String password) throws IOException {

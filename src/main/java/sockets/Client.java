@@ -23,6 +23,8 @@ public class Client extends Thread {
     private ReceptionistData receptionistData;
     private BookingData bookingData;
 
+    private Receptionist receptionist;
+
     public Client(Socket socket) throws IOException {
         this.socket = socket;
         this.send = new PrintStream(this.socket.getOutputStream());
@@ -130,8 +132,11 @@ public class Client extends Thread {
                         this.send.println(Action.RECEPTIONIST_REGISTERED);
                         break;
                     case Action.RECEPTIONIST_SEARCH:
-                        this.receptionistData.receptionistLogin(datos[1],datos[2]);
-                        this.send.println(Action.RECEPTIONIST_LOGIN); //cambie esto
+                        if ((this.receptionist = this.receptionistData.receptionistLogin(datos[1],datos[2])) != null) {
+                            this.send.println(Action.RECEPTIONIST_LOGIN + this.receptionist);
+                        } else {
+                            this.send.println(Action.RECEPTIONIST_NOT_LOGIN);
+                        }
                         break;
                     case Action.REQUEST_BOOKING_NUMBER:
                         if (this.bookingData.bookingNumberExists(datos[1])) {
