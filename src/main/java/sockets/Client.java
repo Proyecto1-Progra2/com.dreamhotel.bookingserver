@@ -22,6 +22,7 @@ public class Client extends Thread {
     private ImageData imageData;
     private ReceptionistData receptionistData;
     private BookingData bookingData;
+    private HuespedData huespedData;
 
     private Receptionist receptionist;
 
@@ -39,6 +40,7 @@ public class Client extends Thread {
             this.imageData = new ImageData();
             this.receptionistData = new ReceptionistData();
             this.bookingData = new BookingData();
+            this.huespedData = new HuespedData();
 
             while (true) {
                 this.lectura = this.receive.readLine();
@@ -159,6 +161,10 @@ public class Client extends Thread {
                             envioBookings += booking.toString();
                         }
                         this.send.println(envioBookings);
+                        break;
+                    case Action.HOST_REGISTER:
+                        this.huespedData.insert(new Host(datos[1], datos[2], datos[3], Integer.parseInt(datos[4]), datos[5], datos[6], datos[7]));
+                        this.send.println(Action.HOST_REGISTERED);
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + accion);
