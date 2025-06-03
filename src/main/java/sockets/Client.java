@@ -152,6 +152,14 @@ public class Client extends Thread {
                         Person receptionist = new Person(datos[6], datos[7], 0);
                         this.bookingData.insert(new Booking(datos[1], host, starDate, departureDate, receptionist, datos[8], datos[9]));
                         break;
+                    case Action.BOOKING_LIST:
+                        String envioBookings = Action.BOOKING_LIST;
+                        ArrayList<Booking> bookings = this.bookingData.findBookingHotelNumber(datos[1]);
+                        for (Booking booking : bookings) {
+                            envioBookings += booking.toString();
+                        }
+                        this.send.println(envioBookings);
+                        break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + accion);
                 }

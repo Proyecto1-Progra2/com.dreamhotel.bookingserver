@@ -98,6 +98,18 @@ public class BookingData {
         return bookings;
     }
 
+    public ArrayList<Booking> findBookingHotelNumber(String hotelNumber) throws IOException {
+        ArrayList<Booking> bookings = new ArrayList<>();
+
+        for (int i = 0; i < this.findAll().size(); i++) {
+            if (this.findAll().get(i).getHotelNumber().equalsIgnoreCase(hotelNumber)) {
+                bookings.add(this.findAll().get(i));
+            }
+        }
+
+        return bookings;
+    }
+
     public boolean bookingNumberExists(String bookingNumber) throws IOException {
         int totalRegistros = (int)(raf.length() / TAMANO_REGISTRO);
 
