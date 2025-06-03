@@ -15,11 +15,11 @@ public class BookingData {
 
     private RandomAccessFile raf;
 
-    private final int TAMANO_BOOKING_NUMBER = 20;
-    private final int TAMANO_HOST = 40;
-    private final int TAMANO_STARTDATE = 20;
-    private final int TAMANO_DEPARTUREDATE = 20;
-    private final int TAMANO_RECEPTIONIST = 40;
+    private final int TAMANO_BOOKING_NUMBER = 10;
+    private final int TAMANO_HOST = 50;
+    private final int TAMANO_STARTDATE = 15;
+    private final int TAMANO_DEPARTUREDATE = 15;
+    private final int TAMANO_RECEPTIONIST = 50;
     private final int TAMANO_ROOMNUMBER = 20;
     private final int TAMANO_HOTELNUMBER = 20;
     private final int TAMANO_REGISTRO = 180;

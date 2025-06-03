@@ -1,14 +1,12 @@
 package sockets;
 
 import data.*;
-import domain.Hotel;
-import domain.Image;
-import domain.Receptionist;
-import domain.Room;
+import domain.*;
 import utils.Action;
 
 import java.io.*;
 import java.net.Socket;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
 
@@ -140,6 +138,13 @@ public class Client extends Thread {
                         } else {
                             this.send.println(Action.BOOKING_NUMBER_NO_EXIST);
                         }
+                        break;
+                    case Action.BOOKING_REGISTER:
+                        Person host = new Person(datos[2], datos[3], 0);
+                        LocalDate starDate = LocalDate.parse(datos[4]);
+                        LocalDate departureDate = LocalDate.parse(datos[5]);
+                        Person receptionist = new Person(datos[6], datos[7], 0);
+                        this.bookingData.insert(new Booking(datos[1], host, starDate, departureDate, receptionist, datos[8], datos[9]));
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + accion);
