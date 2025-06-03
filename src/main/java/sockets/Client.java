@@ -131,6 +131,7 @@ public class Client extends Thread {
                         break;
                     case Action.RECEPTIONIST_SEARCH:
                         this.receptionistData.receptionistLogin(datos[1],datos[2]);
+                        this.send.println(Action.RECEPTIONIST_LOGIN); //cambie esto
                         break;
                     case Action.REQUEST_BOOKING_NUMBER:
                         if (this.bookingData.bookingNumberExists(datos[1])) {

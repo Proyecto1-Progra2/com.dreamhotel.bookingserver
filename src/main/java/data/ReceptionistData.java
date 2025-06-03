@@ -1,6 +1,7 @@
 package data;
 
 import domain.Receptionist;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -84,6 +85,18 @@ public class ReceptionistData {
         }
 
         return encontrado;
+    }
+
+    public Receptionist receptionistLoginTwo(String username, String password) throws IOException {
+        Receptionist receptionist = null;
+        ArrayList<Receptionist> receptionists = findAll();
+        for (Receptionist r : receptionists) {
+            if (r.getUsername().trim().equalsIgnoreCase(username.trim()) && r.getPassword().trim().equalsIgnoreCase(password)) {
+                receptionist = r;
+                break;
+            }
+        }
+        return receptionist;
     }
 
 
