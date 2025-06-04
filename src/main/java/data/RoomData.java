@@ -48,7 +48,19 @@ public class RoomData {
         return datos;
     }
 
-    public void insert(Room room) throws IOException {
+    public boolean insert(Room room) throws IOException {
+        //Verificar si ya existe un room con el mismo número en ese hotel
+        String hotelNumber = room.getHotelNumber();
+
+        ArrayList<Room> roomsExists = findAll(); // Usamos el metodo findAll()
+        for (Room r : roomsExists) {
+            if (r.getRoomNumber().equals(room.getRoomNumber()) && r.getHotelNumber().equals(hotelNumber)) {
+                // Si encontramos un hotel con el mismo número, lanzamos un boolean
+                //throw new IOException("Ya existe un cuarto en ese hotel con el número: " + room.getRoomNumber());
+                return false; // La inserción no se realizó debido a duplicidad
+            }
+        }
+
         raf.setLength(raf.length() + TAMANO_REGISTRO);
         raf.seek(raf.length() - TAMANO_REGISTRO);
 
@@ -65,7 +77,9 @@ public class RoomData {
         raf.write(imageFixed);
 
         raf.write(toBytes(room.getHotelNumber(), TAMANO_HOTEL_NUMBER));
+        return true; // La inserción fue exitosa
     }
+
 
     public void insertPos(Room room, int posicion) throws IOException {
         raf.seek(posicion * TAMANO_REGISTRO);

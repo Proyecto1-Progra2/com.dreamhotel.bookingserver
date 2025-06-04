@@ -24,6 +24,8 @@ public class Client extends Thread {
     private BookingData bookingData;
     private HuespedData huespedData;
 
+    private boolean inserted; //es la hora de registrar hotel y room, valida que no se repitan sus numeros
+
     private Receptionist receptionist;
     private Host host;
 
@@ -50,8 +52,13 @@ public class Client extends Thread {
                 String accion = datos[0];
                 switch (accion) {
                     case Action.HOTEL_REGISTER:
-                        this.hotelData.insert(new Hotel(datos[1], datos[2], datos[3], new ArrayList<>()));
-                        this.send.println(Action.HOTEL_REGISTERED);
+                        inserted = this.hotelData.insert(new Hotel(datos[1], datos[2], datos[3], new ArrayList<>()));
+                        if (inserted){
+                            this.send.println(Action.HOTEL_REGISTERED);
+
+                        }else{
+                            this.send.println(Action.HOTEL_NOT_REGISTERED);
+                        }
                         break;
                     case Action.HOTEL_NOT_REGISTER:
                         this.send.println(Action.HOTEL_NOT_REGISTERED);
@@ -79,10 +86,16 @@ public class Client extends Thread {
                         this.send.println(Action.HOTEL_DELETED);
                         break;
                     case Action.ROOM_REGISTER: //el dato 5 es de imagenes, tal tal en el insert de RoomData mandarle un arreglo de bytes con la imagen
-                        this.roomData.insert(new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4]), null, datos[7]));//revisar para meter los datos
+                        inserted = this.roomData.insert(new Room(datos[1], datos[2], datos[3], Double.parseDouble(datos[4]), null, datos[7]));//revisar para meter los datos
                         byte[] imageBytes = Base64.getDecoder().decode(datos[6]);
                         this.imageData.insert(new Image(datos[5], datos[7], imageBytes));
-                        this.send.println(Action.ROOM_REGISTERED);
+
+                        if (inserted){
+                            this.send.println(Action.ROOM_REGISTERED);
+
+                        }else{
+                            this.send.println(Action.ROOM_NOT_REGISTERED);
+                        }
                         break;
                     case Action.ROOM_NOT_REGISTER:
                         this.send.println(Action.ROOM_NOT_REGISTERED);

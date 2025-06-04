@@ -50,28 +50,28 @@ public class HotelData {
         return datos;
     }
 
-    public void insert(Hotel hotel) throws IOException {
-        // Aumentar el tamaño del archivo para el nuevo registro del hotel
-        raf.setLength(raf.length() + TAMANO_REGISTRO);
-        raf.seek(raf.length() - TAMANO_REGISTRO);
-
-        // Escribir la información del hotel
-        byte numero[] = toBytes(hotel.getNumber(), TAMANO_NUMERO);
-        raf.write(numero);
-        byte nombre[] = toBytes(hotel.getName(), TAMANO_NOMBRE);
-        raf.write(nombre);
-        byte direccion[] = toBytes(hotel.getAddress(), TAMANO_DIRECCION);
-        raf.write(direccion);
-
-        // Si el hotel tiene habitaciones, las insertamos usando RoomData
-        if (hotel.getRooms() != null) {
-            for (Room room : hotel.getRooms()) {
-                // Asegurarnos de que la habitación está vinculada al hotel correcto
-                room.setHotelNumber(hotel.getNumber());
-                roomData.insert(room); // Delegar la inserción de la habitación a RoomData
-            }
-        }
-    }
+//    public void insert(Hotel hotel) throws IOException {
+//        // Aumentar el tamaño del archivo para el nuevo registro del hotel
+//        raf.setLength(raf.length() + TAMANO_REGISTRO);
+//        raf.seek(raf.length() - TAMANO_REGISTRO);
+//
+//        // Escribir la información del hotel
+//        byte numero[] = toBytes(hotel.getNumber(), TAMANO_NUMERO);
+//        raf.write(numero);
+//        byte nombre[] = toBytes(hotel.getName(), TAMANO_NOMBRE);
+//        raf.write(nombre);
+//        byte direccion[] = toBytes(hotel.getAddress(), TAMANO_DIRECCION);
+//        raf.write(direccion);
+//
+//        // Si el hotel tiene habitaciones, las insertamos usando RoomData
+//        if (hotel.getRooms() != null) {
+//            for (Room room : hotel.getRooms()) {
+//                // Asegurarnos de que la habitación está vinculada al hotel correcto
+//                room.setHotelNumber(hotel.getNumber());
+//                roomData.insert(room); // Delegar la inserción de la habitación a RoomData
+//            }
+//        }
+//    }
 
     public void insertPos(Hotel hotel, int posicion) throws IOException {
         raf.seek(posicion * TAMANO_REGISTRO);
@@ -173,5 +173,39 @@ public class HotelData {
                 return;
             }
         }
+    }
+
+    public boolean insert(Hotel hotel) throws IOException {
+        //Verificar si ya existe un hotel con el mismo número
+        ArrayList<Hotel> hotelesExistentes = findAll(); // Usamos el metodo findAll()
+        for (Hotel h : hotelesExistentes) {
+            if (h.getNumber().equals(hotel.getNumber())) {
+                // Si encontramos un hotel con el mismo número, lanzamos una false
+                return false;
+            }
+        }
+
+        // Aumentar el tamaño del archivo para el nuevo registro del hotel
+        raf.setLength(raf.length() + TAMANO_REGISTRO);
+        raf.seek(raf.length() - TAMANO_REGISTRO);
+
+        // Escribir la información del hotel
+        byte numero[] = toBytes(hotel.getNumber(), TAMANO_NUMERO);
+        raf.write(numero);
+        byte nombre[] = toBytes(hotel.getName(), TAMANO_NOMBRE);
+        raf.write(nombre);
+        byte direccion[] = toBytes(hotel.getAddress(), TAMANO_DIRECCION);
+        raf.write(direccion);
+
+        // Si el hotel tiene habitaciones, las insertamos usando RoomData
+        if (hotel.getRooms() != null) {
+            for (Room room : hotel.getRooms()) {
+                // Asegurarnos de que la habitación está vinculada al hotel correcto
+                room.setHotelNumber(hotel.getNumber());
+                roomData.insert(room); // Delegar la inserción de la habitación a RoomData
+            }
+        }
+
+        return true; //se inserto con exito
     }
 }
