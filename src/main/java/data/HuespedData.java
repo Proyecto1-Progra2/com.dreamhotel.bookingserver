@@ -12,18 +12,18 @@ import java.util.ArrayList;
 public class HuespedData {
 
     private RandomAccessFile raf;
-    private final int TAMANO_REGISTRO = 176; //total por cantidad de registros
-    private final int TAMANO_ID = 10;
+    private final int TAMANO_REGISTRO = 185; //total por cantidad de registros
+    private final int TAMANO_ID = 15;
     private final int TAMANO_NAME = 40;
     private final int TAMANO_LASTNAME = 40;
-    private final int TAMANO_PHONENUMBER = 16;
+    private final int TAMANO_PHONENUMBER = 20;
     private final int TAMANO_ADDRESS = 20;
     private final int TAMANO_EMAIL = 30;
     private final int TAMANO_COUNTRY = 20;
 
 
     public HuespedData() throws FileNotFoundException {
-        this.raf = new RandomAccessFile(new File("huespedes.dat"), "rw");
+        this.raf = new RandomAccessFile(new File("host.dat"), "rw");
     }
 
     private String readString(int tamanoString, long posicion) throws IOException {
@@ -51,6 +51,8 @@ public class HuespedData {
         raf.seek(raf.length() - TAMANO_REGISTRO);
         // Se debe transformar el string en un arreglo de bytes para
         // poder escribirlo en el archivo
+        byte id[] = toBytes(host.getId(), TAMANO_ID);
+        raf.write(id);
         byte nombre[] = toBytes(host.getName(),TAMANO_NAME);
         raf.write(nombre);
         byte apellidos[]= toBytes(host.getLastName(),TAMANO_LASTNAME);
