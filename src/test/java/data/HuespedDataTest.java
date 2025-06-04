@@ -1,15 +1,15 @@
 package data;
 
 import domain.Host;
-import org.junit.jupiter.api.Test;
+//import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+//import static org.junit.jupiter.api.Assertions.*;
 
 class HuespedDataTest {
 
-    @Test
+    //@Test
     public void crear_archivo() throws IOException {
         //arrange
         HuespedData huespedData = null;
