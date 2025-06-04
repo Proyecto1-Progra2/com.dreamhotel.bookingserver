@@ -84,43 +84,23 @@ public class HuespedData {
         }//for
         return huespedes;
     }
-    public Host hostLogin(String name, String lastName) throws IOException {
-        int totalRegistros = (int) (this.raf.length() / TAMANO_REGISTRO);
-        int numReg = 0;
-        Host host = null;
+    public Host hostSearch(String idSearch) throws IOException {
+        int totalRegistros = (int)(raf.length()/TAMANO_REGISTRO);
+        for(int i=0; i<totalRegistros; i++){
+            raf.seek(i*TAMANO_REGISTRO);
 
-        while (numReg < totalRegistros) {
-            int posInicioRegistro = numReg * TAMANO_REGISTRO;
+            String id= this.readString(TAMANO_ID,raf.getFilePointer());
+            String name = this.readString(TAMANO_NAME, raf.getFilePointer());
+            String lastName = this.readString(TAMANO_LASTNAME, raf.getFilePointer());
+            int phoneNumber = raf.readInt();
+            String address = this.readString(TAMANO_ADDRESS, raf.getFilePointer());
+            String email = this.readString(TAMANO_EMAIL, raf.getFilePointer());
+            String country = this.readString(TAMANO_COUNTRY, raf.getFilePointer());
 
-            // Leer campos
-            raf.seek(posInicioRegistro);
-            String id = readString(TAMANO_ID, posInicioRegistro).trim();
-
-            int posName = posInicioRegistro + TAMANO_ID;
-            String nameActual = readString(TAMANO_NAME, posName).trim();
-
-            int posLastName = posName + TAMANO_NAME;
-            String lastNameActual = readString(TAMANO_LASTNAME, posLastName).trim();
-
-            int posPhone = posLastName + TAMANO_LASTNAME;
-            raf.seek(posPhone);
-            int phoneNumber = raf.readInt(); // importante leer el int
-
-            int posAddress = posPhone + 4;
-            String address = readString(TAMANO_ADDRESS, posAddress).trim();
-
-            int posEmail = posAddress + TAMANO_ADDRESS;
-            String email = readString(TAMANO_EMAIL, posEmail).trim();
-
-            int posCountry = posAddress + TAMANO_EMAIL;
-            String country = readString(TAMANO_COUNTRY, posCountry).trim();
-
-            if (name.equalsIgnoreCase(nameActual) && lastNameActual.equalsIgnoreCase(lastNameActual)) {
-                host = new Host(id, nameActual, lastNameActual, phoneNumber, address, email, country);
+            if (id.equalsIgnoreCase(idSearch)) {
+                return new Host(id,name,lastName, phoneNumber, address, email, country );
             }
-
-            numReg++;
-        }
-        return host;
+        }//for
+        return null;
     }
 }

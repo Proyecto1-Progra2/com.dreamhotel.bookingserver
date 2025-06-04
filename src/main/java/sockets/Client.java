@@ -25,6 +25,7 @@ public class Client extends Thread {
     private HuespedData huespedData;
 
     private Receptionist receptionist;
+    private Host host;
 
     public Client(Socket socket) throws IOException {
         this.socket = socket;
@@ -165,6 +166,13 @@ public class Client extends Thread {
                     case Action.HOST_REGISTER:
                         this.huespedData.insert(new Host(datos[1], datos[2], datos[3], Integer.parseInt(datos[4]), datos[5], datos[6], datos[7]));
                         this.send.println(Action.HOST_REGISTERED);
+                        break;
+                    case Action.HOST_REQUEST:
+                        if ((this.host = this.huespedData.hostSearch(datos[1])) != null) {
+                            this.send.println(Action.HOST_EXIST+this.host);
+                        } else {
+                            this.send.println(Action.HOST_NO_EXIST);
+                        }
                         break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + accion);
