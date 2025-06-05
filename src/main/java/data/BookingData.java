@@ -129,15 +129,24 @@ public class BookingData {
 
     public void delete(String bookingNumber) throws IOException {
         int totalRegistros = (int)(raf.length() / TAMANO_REGISTRO);
+        byte[] marcador = toBytes("***", TAMANO_BOOKING_NUMBER);
+
         for (int i = 0; i < totalRegistros; i++) {
             raf.seek(i * TAMANO_REGISTRO);
             String numeroActual = readString(TAMANO_BOOKING_NUMBER, raf.getFilePointer());
             if (numeroActual.trim().equalsIgnoreCase(bookingNumber)) {
+                // Marca bookingNumber
                 raf.seek(i * TAMANO_REGISTRO);
-                byte[] marcador = toBytes("***", TAMANO_BOOKING_NUMBER);
                 raf.write(marcador);
+
+                // Marca roomNumber con "***"
+                int roomNumberOffset = TAMANO_BOOKING_NUMBER + TAMANO_HOST + TAMANO_STARTDATE + TAMANO_DEPARTUREDATE + TAMANO_RECEPTIONIST;
+                raf.seek(i * TAMANO_REGISTRO + roomNumberOffset);
+                raf.write(marcador);
+
                 return;
             }
         }
     }
+
 }

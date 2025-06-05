@@ -167,6 +167,7 @@ public class Client extends Thread {
                         LocalDate departureDate = LocalDate.parse(datos[5]);
                         Person receptionist = new Person(datos[6], datos[7], 0);
                         this.bookingData.insert(new Booking(datos[1], host, starDate, departureDate, receptionist, datos[8], datos[9]));
+                        this.send.println(Action.BOOKING_REGISTERED);
                         break;
                     case Action.BOOKING_LIST:
                         String envioBookings = Action.BOOKING_LIST;
