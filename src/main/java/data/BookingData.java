@@ -100,15 +100,17 @@ public class BookingData {
 
     public ArrayList<Booking> findBookingHotelNumber(String hotelNumber) throws IOException {
         ArrayList<Booking> bookings = new ArrayList<>();
+        ArrayList<Booking> allBookings = this.findAll(); // ✅ Carga una sola vez
 
-        for (int i = 0; i < this.findAll().size(); i++) {
-            if (this.findAll().get(i).getHotelNumber().equalsIgnoreCase(hotelNumber)) {
-                bookings.add(this.findAll().get(i));
+        for (Booking booking : allBookings) {
+            if (booking.getHotelNumber().equalsIgnoreCase(hotelNumber)) {
+                bookings.add(booking);
             }
         }
 
         return bookings;
     }
+
 
     public boolean bookingNumberExists(String bookingNumber) throws IOException {
         int totalRegistros = (int)(raf.length() / TAMANO_REGISTRO);

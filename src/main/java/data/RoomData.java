@@ -1,11 +1,13 @@
 package data;
 
+import domain.Booking;
 import domain.Room;
 import domain.Image; // Importa tu clase Image
 import java.io.File; // Necesario para la clase File
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 public class RoomData {
@@ -236,4 +238,40 @@ public class RoomData {
             }
         }
     }
+
+    public ArrayList<Room> findAvailableRooms(LocalDate startDate, LocalDate endDate, String hotelNumber, BookingData bookingData) throws IOException {
+        ArrayList<Room> allRooms = this.findAllRoomsByHotel(hotelNumber); // Todas las habitaciones del hotel
+        ArrayList<Booking> bookings = bookingData.findBookingHotelNumber(hotelNumber); // Reservas del hotel
+
+        ArrayList<Room> availableRooms = new ArrayList<>();
+
+        for (Room room : allRooms) {
+            boolean isAvailable = true;
+
+            for (Booking booking : bookings) {
+                boolean datesOverlap = startDate.isBefore(booking.getDepartureDate()) &&
+                        endDate.isAfter(booking.getStartDate());
+
+                if (datesOverlap) {
+                    String[] reservedRooms = booking.getRoomNumber().split(",");
+                    for (String reservedRoom : reservedRooms) {
+                        if (reservedRoom.trim().equals(room.getRoomNumber())) {
+                            isAvailable = false;
+                            break;
+                        }
+                    }
+                }
+
+                if (!isAvailable) break;
+            }
+
+            if (isAvailable) {
+                availableRooms.add(room);
+            }
+        }
+
+        return availableRooms;
+    }
+
+
 }

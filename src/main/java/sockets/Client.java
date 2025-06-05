@@ -190,6 +190,18 @@ public class Client extends Thread {
                     case Action.BOOKING_DELETE:
                         this.bookingData.delete(datos[1]);
                         break;
+                    case Action.HOTEL_ROOMS_BOOKING:
+                        String envioRoomsHotelBooking = Action.HOTEL_ROOMS;
+                        System.out.println(this.lectura);
+                        LocalDate starDateBooking = LocalDate.parse(datos[1]);
+                        LocalDate endDateBooking = LocalDate.parse(datos[2]);
+                        String hotelNumber = datos[3];
+                        ArrayList<Room> roomsHotelBooking = this.roomData.findAvailableRooms(starDateBooking, endDateBooking, hotelNumber, this.bookingData);
+                        for (Room roomHotel : roomsHotelBooking) {
+                            envioRoomsHotelBooking += roomHotel.toString();
+                        }
+                        this.send.println(envioRoomsHotelBooking);
+                        break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + accion);
                 }
