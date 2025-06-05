@@ -124,4 +124,18 @@ public class BookingData {
 
         return false;
     }
+
+    public void delete(String bookingNumber) throws IOException {
+        int totalRegistros = (int)(raf.length() / TAMANO_REGISTRO);
+        for (int i = 0; i < totalRegistros; i++) {
+            raf.seek(i * TAMANO_REGISTRO);
+            String numeroActual = readString(TAMANO_BOOKING_NUMBER, raf.getFilePointer());
+            if (numeroActual.trim().equalsIgnoreCase(bookingNumber)) {
+                raf.seek(i * TAMANO_REGISTRO);
+                byte[] marcador = toBytes("***", TAMANO_BOOKING_NUMBER);
+                raf.write(marcador);
+                return;
+            }
+        }
+    }
 }

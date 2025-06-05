@@ -187,6 +187,9 @@ public class Client extends Thread {
                             this.send.println(Action.HOST_NO_EXIST);
                         }
                         break;
+                    case Action.BOOKING_DELETE:
+                        this.bookingData.delete(datos[1]);
+                        break;
                     default:
                         throw new IllegalStateException("Unexpected value: " + accion);
                 }

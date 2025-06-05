@@ -12,12 +12,12 @@ import java.util.ArrayList;
 public class HuespedData {
 
     private RandomAccessFile raf;
-    private final int TAMANO_REGISTRO = 185; //total por cantidad de registros
+    private final int TAMANO_REGISTRO = 215; //total por cantidad de registros
     private final int TAMANO_ID = 15;
     private final int TAMANO_NAME = 40;
     private final int TAMANO_LASTNAME = 40;
     private final int TAMANO_PHONENUMBER = 20;
-    private final int TAMANO_ADDRESS = 20;
+    private final int TAMANO_ADDRESS = 50;
     private final int TAMANO_EMAIL = 30;
     private final int TAMANO_COUNTRY = 20;
 
